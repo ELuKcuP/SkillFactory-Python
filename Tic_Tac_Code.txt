@@ -1,0 +1,85 @@
+field = [
+    [' ',  '1', '2', '3'],
+    ['1', '-', '-', '-'],
+    ['2', '-', '-', '-'],
+    ['3', '-', '-', '-']
+]
+
+def greeting():
+    print('------- Приветствуем вас в игре Крестики-Нолики -------')
+    print('Player1 играет X, Player2 играет O')
+    print('Для того чтобы сходить, нажмите в консоли первую и вторую координату, указанную в полях.')
+    print('Формат ввода следующий "цифра - пробел - цифра". Любой другой ввод не соотвествующий данному формату приведет к повторному вводу' )
+    print('')
+
+
+def print_field(field):
+    for row in field:
+        temp_string = '  '.join(map(str, row))
+        print(temp_string.center(3))
+    print("*********")
+
+def chech_parity(a):
+    if a % 2 == 0:
+        return True
+    else:
+        return False
+
+
+def check_win(value):
+    if (field[1][1] == value and field[1][2] == value and field[1][3] == value or
+        field[2][1] == value and field[2][2] == value and field[2][3] == value or
+        field[3][1] == value and field[3][2] == value and field[3][3] == value or
+        field[1][1] == value and field[2][1] == value and field[3][1] == value or
+        field[1][2] == value and field[2][2] == value and field[3][2] == value or
+        field[1][3] == value and field[2][3] == value and field[3][3] == value or
+        field[1][1] == value and field[2][2] == value and field[3][3] == value or
+        field[3][1] == value and field[2][2] == value and field[1][3] == value ):
+
+        if value == 'X':
+            print("Congratulate! Player1 win")
+            exit(0)
+        else:
+            print("Congratulate! Player2 win")
+            exit(0)
+
+
+def check_correct_input_data(string):
+        if len(string) == 3:
+            if (string[0].isdigit() and (1 <= int(string[0]) <= 3)):
+                if string[1] == ' ':
+                    if (string[2].isdigit() and (1 <= int(string[2]) <= 3)):
+                        temp_indexces_list = string.split()
+                        if field[int(temp_indexces_list[0])][int(temp_indexces_list[1])] == '-':
+                            return False
+                        else:
+                            print("Это клетка уже занята!Попробуйте ещё раз")
+                            return True
+        print("Некорректный ввод данных!Попробуйте ещё раз")
+        return True
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+
+    count = 0
+    Tic_Tac = {True: 'X', False: '0'}
+    switch = True
+    greeting()
+
+    print_field(field)
+    while count < 9:
+        print('Куда поставим', Tic_Tac[switch], '? ', end='')
+        string = input()
+        while check_correct_input_data(string):
+            print_field(field)
+            print('Куда поставим', Tic_Tac[switch], '? ', end='')
+            string = input()
+        indexes = string.split()
+        field[int(indexes[0])][int(indexes[1])] = Tic_Tac[switch]
+        count += 1
+        print_field(field)
+        if count >= 5:
+            check_win(Tic_Tac[switch])
+        switch = chech_parity(count)
+    print("Draw!")
